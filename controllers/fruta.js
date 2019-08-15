@@ -84,9 +84,56 @@ function getFruta(req, res) {
   })
 }
 
+function updateFruta(req, res) {
+  let frutaId = req.params.id;
+  let update = req.body;
+
+  Fruta.findByIdAndUpdate(frutaId, update, {new: true}, (err, frutaUpdated) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error en el servidor'
+      });
+    } else {
+      if (frutaUpdated) {
+        res.status(200).send({
+          fruta: frutaUpdated
+        });
+      } else {
+        res.status(404).send({
+          message: 'No existe la fruta'
+        });
+      }
+    }
+  })
+}
+
+function deleteFruta(req, res) {
+  let frutaId = req.params.id;
+
+  Fruta.findByIdAndRemove(frutaId, (err, frutaRemoved) => {
+    if (err) {
+      res.status(500).send({
+        message: 'Error en el servidor'
+      });
+    } else {
+      if (frutaRemoved) {
+        res.status(200).send({
+          fruta: frutaRemoved
+        });
+      } else {
+        res.status(404).send({
+          message: 'No existe la fruta'
+        });
+      }
+    }
+  })
+}
+
 module.exports = {
   pruebas,
   saveFruta,
   getFrutas,
-  getFruta
+  getFruta,
+  updateFruta,
+  deleteFruta
 };
